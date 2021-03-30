@@ -8,7 +8,7 @@ import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
 
 //const are always declared on top of the class
-private const val stroke_width = 6f
+private const val stroke_width = 8f
 
 class MyCanvas(context:Context):View(context) {
 
@@ -119,14 +119,16 @@ class MyCanvas(context:Context):View(context) {
 
         //most important function is this
 
-        val dx = Math.abs(motionX - currentX)
-        val dy = Math.abs(motionY - currentY)
+       // var dx = Math.abs(motionX - currentX)
+        var dx = Math.abs(motionX - currentX)
+        var dy = Math.abs(motionY - currentY)
 
         //IMPORTANT, dx and dy must be greater than touchTolerance
          //https://youtu.be/Npwj-WVJxSU?t=1710
 
         if(dx >= touchTolerance || dy >= touchTolerance){
-            path.quadTo(currentX,currentY, (motionX + currentX)/2,(motionY + currentY)/2)
+
+            path.quadTo(currentX, currentY, (motionX + currentX)/2,(motionY + currentY)/2)
 
 
             //make again motion x and y
@@ -146,8 +148,9 @@ class MyCanvas(context:Context):View(context) {
 
     private fun touchStart() {
         path.reset() //we reset it first
-        path.moveTo(motionX,motionY) //in X and Y pixel
-        //when we changed position
+        path.moveTo(motionX, motionY) //in X and Y pixel
+
+        //when we change position
         currentX = motionX
         currentY = motionY
 

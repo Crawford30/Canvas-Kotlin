@@ -1,16 +1,13 @@
 package com.example.kotlincanvas
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.Path
+import android.graphics.*
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
-import java.security.AccessController.getContext
 
+//const are always declared on top of the class
 private const val stroke_width = 6f
 
 class MyCanvas(context:Context):View(context) {
@@ -21,17 +18,24 @@ class MyCanvas(context:Context):View(context) {
     //Then we draw
 
     //background color
-    private val bgColor = ResourcesCompat.getColor(resources,R.color.white, null)
+    private val bgColor = ResourcesCompat.getColor(resources,R.color.white_one, null)
     private lateinit var   canvas1:Canvas
-    private lateinit var   bitmap1:Bitmap
+    private lateinit var   bitmap1: Bitmap
+
+
+
+    //frame
+    private lateinit var frame: Rect
 
     //pen or touch color
-    private val penColor = ResourcesCompat.getColor(resources,R.color.black, null)
+    private val penColor = ResourcesCompat.getColor(resources,R.color.black_one, null)
 
-    //Touch, means we have to touch the drawing from where the user has touched
+    //Touch, means we have to start the drawing from where the user has touched
     private val touchTolerance = ViewConfiguration.get(context).scaledEdgeSlop
 
     private val paint = Paint().apply {
+
+        //quality of the paint
         color = penColor
         isAntiAlias = true //smooth of the edges
         isDither = true
@@ -42,9 +46,12 @@ class MyCanvas(context:Context):View(context) {
 
     }
 
-    private val path = Path()
-    private val motionX = 0f
-    private val motionY = 0f
+    //path===
+    private var path = Path()
+
+
+    private var motionX = 0f
+    private var motionY = 0f
     private var currentX = 0f
     private var currentY = 0f
 
@@ -56,13 +63,18 @@ class MyCanvas(context:Context):View(context) {
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
 
+        //cal bitmap and canvas
+
         //=====For multiple sketch, we need to create a bitmap and reset using recycle. :: means protected
         if(::bitmap1.isInitialized)bitmap1.recycle()
 
         bitmap1 = Bitmap.createBitmap(w,h,Bitmap.Config.ARGB_8888)
-
         canvas1 = Canvas(bitmap1)
         canvas1.drawColor(bgColor)
+
+        //frame
+        var inset  = 15
+        frame = Rect(inset,inset,w-inset,h-inset)
 
 
     }
@@ -70,6 +82,8 @@ class MyCanvas(context:Context):View(context) {
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         canvas?.drawBitmap(bitmap1, 0f,0f,null)
+
+        canvas?.drawRect(frame,paint)
 
     }
 
@@ -127,6 +141,8 @@ class MyCanvas(context:Context):View(context) {
         invalidate()
 
     }
+
+
 
     private fun touchStart() {
         path.reset() //we reset it first

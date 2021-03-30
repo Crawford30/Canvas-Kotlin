@@ -10,7 +10,7 @@ import androidx.core.content.res.ResourcesCompat
 //const are always declared on top of the class
 private const val stroke_width = 8f
 
-class MyCanvas(context:Context):View(context) {
+class MyCanvas(context: Context) : View(context)  {
 
     //1.canvas
     //2.bitmap
@@ -36,8 +36,9 @@ class MyCanvas(context:Context):View(context) {
     private val paint = Paint().apply {
 
         //quality of the paint
-        color = penColor
-        isAntiAlias = true //smooth of the edges
+       // color = penColor
+        color = Color.RED
+        isAntiAlias = true //to ensure your drawing has smooth edges.
         isDither = true
         style = Paint.Style.STROKE
         strokeWidth = stroke_width
@@ -74,7 +75,7 @@ class MyCanvas(context:Context):View(context) {
 
         //frame
         var inset  = 15
-        frame = Rect(inset,inset,w-inset,h-inset)
+        frame = Rect(inset, inset,w-inset,h-inset)
 
 
     }
@@ -83,7 +84,7 @@ class MyCanvas(context:Context):View(context) {
         super.onDraw(canvas)
         canvas?.drawBitmap(bitmap1, 0f,0f,null)
 
-        canvas?.drawRect(frame,paint)
+        canvas?.drawRect(frame, paint)
 
     }
 
@@ -139,7 +140,7 @@ class MyCanvas(context:Context):View(context) {
 
         }
 
-        //once all done, we invalidate
+        //once all done, we invalidate to redraw
         invalidate()
 
     }
